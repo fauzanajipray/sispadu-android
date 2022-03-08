@@ -1,4 +1,4 @@
-package com.devajip.sispadu.ui.theme
+package com.devajip.sispadu.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
