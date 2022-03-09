@@ -8,7 +8,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.devajip.sispadu.R
+import com.devajip.sispadu.data.source.remote.response.LoginRequest
 import com.devajip.sispadu.presentation.components.ButtonRounded
 import com.devajip.sispadu.presentation.theme.SispaduTheme
 
@@ -33,7 +36,6 @@ import com.devajip.sispadu.presentation.theme.SispaduTheme
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
-
     val state = viewModel.state.value
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
@@ -43,10 +45,10 @@ fun LoginScreen(
         email.isNotEmpty() && password.isNotEmpty() && password.length >= 7
                 && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
-    
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        backgroundColor = MaterialTheme.colors.primary,
+        backgroundColor = MaterialTheme.colors.background,
     ) {
         Column(
             Modifier.fillMaxSize(),
@@ -59,11 +61,12 @@ fun LoginScreen(
                 modifier = Modifier
                     .weight(1f)
                     .size(200.dp),
-                colorFilter = ColorFilter.tint(Color.White)
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
             )
             Card(
                 Modifier.weight(2f),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+                backgroundColor = MaterialTheme.colors.surface
             ) {
                 Column(
                     Modifier
@@ -71,7 +74,7 @@ fun LoginScreen(
                         .padding(32.dp)
                 ) {
                     Text(
-                        text = "Welcome Back!",
+                        text = "Login",
                         fontWeight = FontWeight.Bold,
                         fontSize = 32.sp,
                     )
@@ -118,13 +121,11 @@ fun LoginScreen(
                             text = "Login",
                             enabled = isFormValid,
                             modifier = Modifier.fillMaxWidth(),
-                            {
-                                if (isFormValid) {
-                                    viewModel.login(email, password)
-                                }
-                            },
-                            Color.Red
-                        )
+                        ) {
+                            if (isFormValid) {
+                                viewModel.login(LoginRequest(email, password))
+                            }
+                        }
                         if (state.isLoading) {
                             Spacer(modifier = Modifier.weight(1f))
                             CircularProgressIndicator(
@@ -132,7 +133,9 @@ fun LoginScreen(
                             )
                         }
                         if (state.error != null) {
-                            Toast.makeText(context, state.error, Toast.LENGTH_SHORT).show()
+                            LaunchedEffect(key1 = Unit){
+                                Toast.makeText(context, state.error, Toast.LENGTH_SHORT).show()
+                            }
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Row(

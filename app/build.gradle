@@ -52,17 +52,28 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
 
+    // material
+    implementation "com.google.android.material:material:$versions.materialVersion"
+
     //compose
     implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.activity:activity-compose:$versions.activityVersion"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation "androidx.compose.foundation:foundation:$versions.composeVersion"
+    implementation "androidx.compose.foundation:foundation-layout:$versions.composeVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
     implementation 'androidx.activity:activity-compose:1.4.0'
     implementation 'androidx.navigation:navigation-compose:2.4.1'
     implementation "com.google.accompanist:accompanist-flowlayout:0.20.0"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
     implementation 'androidx.compose.animation:animation:1.1.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+
+    // compose insets
+    implementation "com.google.accompanist:accompanist-insets:$versions.accompanistVersion"
+    implementation "com.google.accompanist:accompanist-flowlayout:$versions.accompanistVersion"
 
     // architecture components
     implementation "androidx.fragment:fragment-ktx:$versions.fragmentVersion"

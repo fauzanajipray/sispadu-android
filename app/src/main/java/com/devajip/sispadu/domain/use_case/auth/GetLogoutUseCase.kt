@@ -1,5 +1,6 @@
 package com.devajip.sispadu.domain.use_case.auth
 
+import com.devajip.sispadu.common.Constant
 import com.devajip.sispadu.common.Resource
 import com.devajip.sispadu.data.source.remote.response.LogoutResponse
 import com.devajip.sispadu.domain.repository.AuthRepository
@@ -16,7 +17,8 @@ class GetLogoutUseCase @Inject constructor(
     operator fun invoke(token: String): Flow<Resource<LogoutResponse>> = flow {
         emit(Resource.loading(null))
         try {
-            val response = authRepository.getLogout(token)
+            val tokenWithPrefix = Constant.TOKEN_PREFIX + token
+            val response = authRepository.getLogout(tokenWithPrefix)
             emit(Resource.success(response))
         } catch (e: HttpException) {
             val errorResponse = Gson().fromJson(e.response()?.errorBody()?.string(), LogoutResponse::class.java)

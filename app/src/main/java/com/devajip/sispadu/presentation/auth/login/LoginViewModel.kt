@@ -23,7 +23,6 @@ class LoginViewModel @Inject constructor(
     private val pref: SharedPreferences,
 ): ViewModel() {
 
-
     private val _state = mutableStateOf(LoginViewState())
     val state: State<LoginViewState> = _state
 
