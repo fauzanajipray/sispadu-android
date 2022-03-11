@@ -1,8 +1,9 @@
 package com.devajip.sispadu.data.di
 
 import com.devajip.sispadu.data.source.remote.network.AuthService
-import com.devajip.sispadu.data.source.remote.network.UserService
 import com.devajip.sispadu.common.Constant
+import com.devajip.sispadu.data.source.remote.network.StaffComplaintService
+import com.devajip.sispadu.data.source.remote.network.UserComplaintService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,8 +47,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideUserService(retrofit: Retrofit) : UserService {
-        return retrofit.create(UserService::class.java)
+    fun provideUserComplaintService(retrofit: Retrofit) : UserComplaintService {
+        return retrofit.create(UserComplaintService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStaffComplaintService(retrofit: Retrofit) : StaffComplaintService {
+        return retrofit.create(StaffComplaintService::class.java)
     }
 
 }

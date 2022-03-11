@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.devajip.sispadu.presentation.components.BottomBar
+import com.devajip.sispadu.presentation.history.HistoryScreen
+import com.devajip.sispadu.presentation.home.HomeScreen
 import com.devajip.sispadu.presentation.theme.SispaduTheme
 
 @Composable
@@ -27,13 +29,12 @@ fun MainScreen(
     ) {
         val modifier = Modifier.padding(it)
 
-        Crossfade(selectedTab) {
-            when(it) {
-
+        Crossfade(selectedTab) { tab ->
+            when(tab) {
+                MainScreenTab.HOME -> HomeScreen()
+                MainScreenTab.COMMUNITY -> HistoryScreen()
             }
-
         }
-
     }
 }
 

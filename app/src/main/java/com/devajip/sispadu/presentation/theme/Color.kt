@@ -17,3 +17,6 @@ val Grey200 = Color(0xFFEBEBEB)
 
 val White = Color.White
 
+val Orange50 = Color(0xFFFFE9CE)
+val Orange300 = Color(0xFFFFAA46)
+

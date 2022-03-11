@@ -73,6 +73,9 @@ ext.versions = [
         // whatIf
         whatIfVersion        : '1.1.0',
 
+        // glide
+        glideVersion         : '4.11.0',
+
         // debugging
         timberVersion        : '4.7.1',
 
