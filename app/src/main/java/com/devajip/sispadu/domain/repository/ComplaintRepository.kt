@@ -7,7 +7,8 @@ interface ComplaintRepository {
 
     suspend fun getComplaints(
         token: String,
-        query: ComplaintsRequestParams
+        query: ComplaintsRequestParams,
+        page: Int,
     ): ComplaintsResponse
 
     suspend fun getComplaintDetail(

@@ -10,15 +10,15 @@ class ComplaintRepositoryImpl @Inject constructor(
 ): ComplaintRepository {
     override suspend fun getComplaints(
         token: String,
-        query: ComplaintsRequestParams
+        query: ComplaintsRequestParams,
+        page: Int
     ): ComplaintsResponse {
         val query : Map<String, String> = mapOf(
             "user_id" to query.user_id,
             "search" to query.search,
             "status" to query.status,
-            "page" to query.page.toString(),
         )
-        return complaintService.getComplaint(token, query)
+        return complaintService.getComplaint(token, query, page)
     }
 
     override suspend fun getComplaintDetail(

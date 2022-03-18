@@ -1,6 +1,5 @@
 package com.devajip.sispadu.presentation.home
 
-import android.content.res.Configuration
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -12,49 +11,50 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.devajip.sispadu.R
+import com.devajip.sispadu.presentation.components.rememberForeverLazyListState
 import com.devajip.sispadu.presentation.theme.Orange300
 import com.devajip.sispadu.presentation.theme.SispaduTheme
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = hiltViewModel()
+    complaintViewModel: ComplaintViewModel = hiltViewModel(),
+    navController: NavController
 ) {
-    val scrollState = rememberScrollState()
+    val scrollState = rememberForeverLazyListState(key = "ComplaintList")
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "SISPADU",
-                        style = MaterialTheme.typography.h6
+                        text = stringResource(id = R.string.app_name),
+                        style = MaterialTheme.typography.h6,
+                        color = MaterialTheme.colors.primary
                     )
                 },
-                backgroundColor = MaterialTheme.colors.primary,
+                backgroundColor = MaterialTheme.colors.surface,
                 elevation = 0.dp
             )
         },
     ) {
-        Column (
-            modifier = Modifier
-                .background(color = MaterialTheme.colors.background)
-                .verticalScroll(scrollState)
-                .padding(bottom = 50.dp),
-        ) {
-            for (i in 0..10) {
-                ItemComplaint()
-            }
-        }
+        ComplaintList(
+            complaints = complaintViewModel.complaintList,
+            navController = navController,
+            complaintViewModel = complaintViewModel,
+            scrollState = scrollState
+        )
     }
 
 }
 
 @Composable
-fun ItemComplaint() {
+fun ItemComplaintTest() {
     Card(
         modifier = Modifier
             .background(color = MaterialTheme.colors.surface)
@@ -143,16 +143,16 @@ fun ItemComplaint() {
 @Composable
 fun ItemComplaintPreview() {
     SispaduTheme {
-        ItemComplaint()
+        ItemComplaintTest()
     }
 }
 
-@Preview("HomeScreen")
-@Preview("HomeScreen dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun HomeScreenPreview() {
-    SispaduTheme() {
-        HomeScreen()
-    }
-}
+//@Preview("HomeScreen")
+//@Preview("HomeScreen dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+//@Composable
+//fun HomeScreenPreview() {
+//    SispaduTheme() {
+//        HomeScreen()
+//    }
+//}
 

@@ -22,7 +22,7 @@ class GetComplaintsUseCase @Inject constructor(
         emit(Resource.loading(null))
         try {
             val tokenWithPrefix = Constant.TOKEN_PREFIX + token
-            val response = complaintRepository.getComplaints(tokenWithPrefix, query)
+            val response = complaintRepository.getComplaints(tokenWithPrefix, query, 1)
             emit(Resource.success(response))
         } catch (e: HttpException) {
             val errorResponse = Gson().fromJson(e.response()?.errorBody()?.string(), ComplaintsResponse::class.java)

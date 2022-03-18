@@ -13,10 +13,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.MaterialTheme
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.devajip.sispadu.presentation.auth.login.LoginScreen
 import com.devajip.sispadu.presentation.auth.login.LoginViewModel
 import com.devajip.sispadu.presentation.main.MainScreen
 import com.devajip.sispadu.common.Constant
+import com.devajip.sispadu.presentation.add_complaint.AddComplaintScreen
+import com.devajip.sispadu.presentation.home.ComplaintDetailScreen
 import com.devajip.sispadu.presentation.main.LogoutViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -44,7 +48,7 @@ fun NavigationScreen() {
     }
 
     val navController = rememberNavController()
-    var pref: SharedPreferences = LocalContext.current.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE)
+    val pref: SharedPreferences = LocalContext.current.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE)
     val token = pref.getString(Constant.PREF_KEY_USER_TOKEN, "")
 
     NavHost(
@@ -76,8 +80,25 @@ fun NavigationScreen() {
                     }
                 }
             } else {
-                MainScreen()
+                MainScreen(navController = navController)
             }
+        }
+        composable(route = Destination.ComplaintDetail.route.plus("/{complaintId}"),
+            arguments = listOf(
+                navArgument("complaintId"){
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            it.arguments?.getInt("complaintId")?.let { it1 ->
+                ComplaintDetailScreen(
+                    navController = navController,
+                    complaintId = it1
+                )
+            }
+        }
+        composable(route = Destination.AddComplaint.route) {
+            AddComplaintScreen(navController = navController)
         }
     }
 

@@ -1,7 +1,6 @@
 package com.devajip.sispadu.data.source.remote.network
 
 import com.devajip.sispadu.data.source.remote.response.*
-import retrofit2.Call
 import retrofit2.http.*
 
 interface AuthService {

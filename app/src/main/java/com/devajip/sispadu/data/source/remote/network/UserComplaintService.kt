@@ -12,7 +12,8 @@ interface UserComplaintService {
     @GET("user/complaints?private=0")
     suspend fun getComplaint(
         @Header("Authorization") token: String,
-        @QueryMap query: Map<String, String>
+        @QueryMap query: Map<String, String>,
+        @Query("page") page: Int
     ): ComplaintsResponse
 
     @Headers("Content-Type: application/json")
