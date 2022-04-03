@@ -13,6 +13,12 @@
     <string name="change_password">Change Password</string>
     <string name="nothing_here">There\'s nothing here</string>
     <string name="history">History</string>
-    <string name="profile_photo">Profile photo</string>
+    <string name="comments">Comments</string>
+    <string name="profile_photo" translatable="false">Profile photo</string>
+
+    <string name="msg_when_complaint_pending">Waiting for approval from Admin</string>
+    <string name="msg_when_complaint_forwarded">Disposed to %1$s</string>
+    <string name="msg_when_complaint_approved">Approved by %1$s</string>
+    <string name="msg_when_complaint_rejected">Rejected by %1$s</string>
 
 </resources>

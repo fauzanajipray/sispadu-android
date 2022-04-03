@@ -13,6 +13,12 @@
     <string name="logout">Keluar</string>
     <string name="change_password">Ganti Password</string>
     <string name="nothing_here">Tidak ada apa-apa disini</string>
+    <string name="comments">Komentar</string>
     <string name="history">Riwayat</string>
+
+    <string name="msg_when_complaint_pending">Menunggu persetujuan dari Admin</string>
+    <string name="msg_when_complaint_forwarded">Laporan telah diteruskan ke %1$s</string>
+    <string name="msg_when_complaint_approved">Laporan telah diterima oleh %1$s</string>
+    <string name="msg_when_complaint_rejected">Laporan telah ditolak oleh %1$s</string>
 
 </resources>

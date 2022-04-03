@@ -43,7 +43,6 @@ fun NavigationScreen() {
             color = if (isSystemInDarkTheme) Color.Black else Color.Transparent,
             darkIcons = useDarkIcons
         )
-
         // setStatusBarsColor() and setNavigationBarColor() also exist
     }
 

@@ -20,3 +20,7 @@ val White = Color.White
 val Orange50 = Color(0xFFFFE9CE)
 val Orange300 = Color(0xFFFFAA46)
 
+val Green700 = Color(0xFF388E3C)
+val Red700 = Color(0xFFD32F2F)
+
+

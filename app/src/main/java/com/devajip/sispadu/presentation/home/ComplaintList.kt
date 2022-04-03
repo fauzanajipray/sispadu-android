@@ -1,10 +1,12 @@
 package com.devajip.sispadu.presentation.home
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
@@ -30,7 +32,9 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.devajip.sispadu.R
+import com.devajip.sispadu.common.Constant
 import com.devajip.sispadu.common.Constant.BASE_URL
+import com.devajip.sispadu.common.getStatusComplaint
 import com.devajip.sispadu.common.loadImage
 import com.devajip.sispadu.domain.model.Complaint
 import com.devajip.sispadu.presentation.components.ErrorItem
@@ -38,7 +42,6 @@ import com.devajip.sispadu.presentation.components.LoadingItem
 import com.devajip.sispadu.presentation.components.LoadingView
 import com.devajip.sispadu.presentation.components.rememberForeverLazyListState
 import com.devajip.sispadu.presentation.navigation.Destination
-import com.devajip.sispadu.presentation.theme.Orange300
 import kotlinx.coroutines.flow.Flow
 
 
@@ -46,7 +49,6 @@ import kotlinx.coroutines.flow.Flow
 fun ComplaintList(
     complaints: Flow<PagingData<Complaint>>,
     navController: NavController,
-    scrollState: LazyListState,
     complaintViewModel: ComplaintViewModel
 ) {
     val lazyComplaintItems = complaints.collectAsLazyPagingItems()
@@ -58,15 +60,17 @@ fun ComplaintList(
         state = scrollState,
     ) {
         items(lazyComplaintItems) { complaint ->
-            ComplaintItem(
-                complaint = complaint!!,
-                onClick = {
-                    complaintViewModel.getComplaintDetail(it)
-                    navController.navigate(
-                        Destination.ComplaintDetail.route.plus("/$it")
-                    )
-                }
-            )
+            if (complaint != null) {
+                ComplaintItem(
+                    complaint = complaint,
+                    onClick = {
+                        complaintViewModel.getComplaintDetail(it)
+                        navController.navigate(
+                            Destination.ComplaintDetail.route.plus("/$it")
+                        )
+                    }
+                )
+            }
         }
 
         lazyComplaintItems.apply {
@@ -115,6 +119,12 @@ fun ComplaintItem(
             .clickable { onClick(complaint.id) },
         elevation = 0.dp
     ) {
+        val statusComplaint  = if (complaint.status == Constant.STATUS_PENDING) {
+            getStatusComplaint(status = complaint.status)
+        } else {
+            getStatusComplaint(status = complaint.status, toName = complaint.positionName)
+        }
+
         Column(
             modifier = Modifier,
             verticalArrangement = Arrangement.SpaceBetween
@@ -129,7 +139,7 @@ fun ComplaintItem(
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.12f),
                 thickness = 1.dp
             )
-            if (!complaint.image.isNullOrEmpty()) {
+            if (complaint.image.isNotEmpty()) {
                 val image = loadImage(
                     url = complaint.image,
                     defaultImage = R.drawable.ic_baseline_image_24
@@ -163,14 +173,14 @@ fun ComplaintItem(
             }
             Row(
                 modifier = Modifier
-                    .background(color = Orange300.copy(alpha = 0.12f))
+                    .background(color = statusComplaint.color.copy(alpha = 0.12f))
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 5.dp, bottom = 5.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
-                Image(painter = painterResource(id = R.drawable.ic_pending) , contentDescription = "Pending")
+                Image(painter = painterResource(id = statusComplaint.icon) , contentDescription = "Pending")
                 Text(
-                    text = "Menunggu persetujuan Admin",
+                    text = statusComplaint.message,
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.padding(start = 8.dp)
                 )

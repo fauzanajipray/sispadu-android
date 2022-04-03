@@ -49,7 +49,7 @@ fun DefaultPreview(){
     SispaduTheme() {
         BottomBar(
             viewModel = MainViewModel(),
-            tabs = arrayOf(MainScreenTab.HOME, MainScreenTab.HISTORY, MainScreenTab.NEWS, MainScreenTab.PROFILE),
+            tabs = arrayOf(MainScreenTab.HOME, MainScreenTab.HISTORY, MainScreenTab.PROFILE),
             selectedTab = MainScreenTab.HOME
         )
     }
