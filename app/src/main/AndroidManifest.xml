@@ -14,7 +14,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Sispadu">
         <activity
-            android:name=".presentation.main.MainActivity"
+            android:name="com.devajip.sispadu.presentation.ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Sispadu">
             <intent-filter>

@@ -15,13 +15,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.MaterialTheme
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.devajip.sispadu.presentation.auth.login.LoginScreen
-import com.devajip.sispadu.presentation.auth.login.LoginViewModel
-import com.devajip.sispadu.presentation.main.MainScreen
+import com.devajip.sispadu.presentation.ui.auth.login.LoginScreen
+import com.devajip.sispadu.presentation.ui.auth.login.LoginViewModel
+import com.devajip.sispadu.presentation.ui.main.MainScreen
 import com.devajip.sispadu.common.Constant
-import com.devajip.sispadu.presentation.add_complaint.AddComplaintScreen
-import com.devajip.sispadu.presentation.home.ComplaintDetailScreen
-import com.devajip.sispadu.presentation.main.LogoutViewModel
+import com.devajip.sispadu.presentation.ui.add_complaint.AddComplaintScreen
+import com.devajip.sispadu.presentation.ui.home.detail.ComplaintDetailScreen
+import com.devajip.sispadu.presentation.ui.main.LogoutViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable

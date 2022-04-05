@@ -21,4 +21,9 @@
     <string name="msg_when_complaint_approved">Laporan telah diterima oleh %1$s</string>
     <string name="msg_when_complaint_rejected">Laporan telah ditolak oleh %1$s</string>
 
+    <string name="seconds_ago">%1$s detik yang lalu</string>
+    <string name="minutes_ago">%1$s menit yang lalu</string>
+    <string name="hours_ago">%1$s jam yang lalu</string>
+    <string name="days_ago">%1$s hari yang lalu</string>
+
 </resources>
