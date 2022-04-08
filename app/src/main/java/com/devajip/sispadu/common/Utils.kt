@@ -61,14 +61,18 @@ fun getDateForHuman(date: String): String {
 
     val formatterSimple: DateFormat = SimpleDateFormat(stringResource(R.string.date_format_patern_1))
     val formatterMonth: DateFormat = SimpleDateFormat(stringResource(R.string.date_format_patern_2))
-    val past: Date? = formatterSimple.parse(date)
+    // :date plus 7 hours || GMT +7
+    val datePlus7 = formatterSimple.parse(date).time + TimeUnit.HOURS.toMillis(7)
+
+    val past = Date(datePlus7)
     val now: Date? = formatterSimple.parse(formatterSimple.format(Date()))
-    val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(now!!.time - past!!.time)
+    val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(now!!.time - past.time)
     val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(now.time - past.time)
     val hours: Long = TimeUnit.MILLISECONDS.toHours(now.time - past.time)
     val days: Long = TimeUnit.MILLISECONDS.toDays(now.time - past.time)
 
     Log.d(TAG, "getDateForHuman: $date")
+    Log.d(TAG, "date plus 7 : $datePlus7")
     Log.d(TAG, "past: $past")
     Log.d(TAG, "now: $now")
     Log.d(TAG, "seconds: $seconds")

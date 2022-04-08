@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -47,7 +48,6 @@ fun ComplaintDetailScreen(
     LaunchedEffect(key1 = Unit) {
         complaintViewModel.getComplaintDetail(complaintId)
     }
-
     val state = complaintViewModel.stateDetail.value
     val context = LocalContext.current
     Scaffold(
@@ -93,6 +93,8 @@ fun ComplaintDetailContents(
     complaint: ComplaintDetail
 ) {
     val scrollState = rememberLazyListState()
+    var scrolledY = 0f
+    var previousOffset = 0
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -109,8 +111,8 @@ fun ComplaintDetailContents(
                         bitmap = it.asImageBitmap(),
                         contentDescription = "Complaint Image",
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp),
+
+                            .fillMaxWidth(),
                         contentScale = ContentScale.FillWidth
                     )
                 }
@@ -158,14 +160,13 @@ fun ComplaintDetailContents(
             complaint.comments.forEach { comment ->
                 item{
                     comment?.let { it ->
-                        // if last item
                         if (it.id == complaint.comments.last()?.id) {
                             CommentRow(
                                 comment = it,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .background(MaterialTheme.colors.surface)
-                                    .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 50.dp)
+                                    .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 30.dp)
                             )
                         }
                         else if (it.id == complaint.comments.first()?.id) {
@@ -383,7 +384,7 @@ fun CommentPreview() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colors.surface)
-                    .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 50.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 30.dp)
             )
         }
     }

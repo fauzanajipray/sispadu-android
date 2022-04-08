@@ -1,5 +1,6 @@
 package com.devajip.sispadu.presentation.ui.home
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,6 +14,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,11 +55,12 @@ fun ComplaintList(
     scrollState: LazyListState
 ) {
     val lazyComplaintItems = complaints.collectAsLazyPagingItems()
+    val paddingTop by animateDpAsState( if (scrollState.firstVisibleItemScrollOffset == 0) 6.dp else 0.dp)
 
     LazyColumn(
         modifier = Modifier
             .padding(bottom = 55.dp,
-                top = if (scrollState.firstVisibleItemScrollOffset == 0) 6.dp else 0.dp
+                top = paddingTop,
             ),
         state = scrollState,
     ) {

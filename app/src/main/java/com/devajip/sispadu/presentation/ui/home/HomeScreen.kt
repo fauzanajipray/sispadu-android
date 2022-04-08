@@ -1,10 +1,14 @@
 package com.devajip.sispadu.presentation.ui.home
 
-import androidx.compose.foundation.*
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.devajip.sispadu.R
-import com.devajip.sispadu.presentation.ui.components.rememberForeverLazyListState
 import com.devajip.sispadu.presentation.theme.Orange300
 import com.devajip.sispadu.presentation.theme.SispaduTheme
+import com.devajip.sispadu.presentation.ui.components.rememberForeverLazyListState
 
 @Composable
 fun HomeScreen(
@@ -27,6 +31,7 @@ fun HomeScreen(
     navController: NavController
 ) {
     val scrollState = rememberForeverLazyListState(key = "ComplaintList")
+    val elevationSize by animateDpAsState(if (scrollState.firstVisibleItemScrollOffset == 0) 0.dp else 6.dp)
 
     Scaffold(
         topBar = {
@@ -39,7 +44,7 @@ fun HomeScreen(
                     )
                 },
                 backgroundColor = MaterialTheme.colors.surface,
-                elevation = 0.dp
+                elevation = elevationSize
             )
         },
     ) {

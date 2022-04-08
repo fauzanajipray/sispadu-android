@@ -1,7 +1,7 @@
 package com.devajip.sispadu.common
 
 object Constant {
-    const val BASE_URL = "https://5a05-182-253-62-109.ngrok.io/"
+    const val BASE_URL = "https://42af-182-253-8-3.ngrok.io/"
     const val BASE_URL_API = "${BASE_URL}api/"
     const val TOKEN_PREFIX = "Bearer "
 

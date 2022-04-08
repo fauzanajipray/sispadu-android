@@ -97,7 +97,9 @@ fun NavigationScreen() {
             }
         }
         composable(route = Destination.AddComplaint.route) {
-            AddComplaintScreen(navController = navController)
+            AddComplaintScreen(
+//                navController = navController
+            )
         }
     }
 
