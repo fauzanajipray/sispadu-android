@@ -31,7 +31,7 @@ fun HomeScreen(
     navController: NavController
 ) {
     val scrollState = rememberForeverLazyListState(key = "ComplaintList")
-    val elevationSize by animateDpAsState(if (scrollState.firstVisibleItemScrollOffset == 0) 0.dp else 6.dp)
+    val elevationSize by animateDpAsState(if (scrollState.firstVisibleItemScrollOffset == 0) 1.dp else 6.dp)
 
     Scaffold(
         topBar = {

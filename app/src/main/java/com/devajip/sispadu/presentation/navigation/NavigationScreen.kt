@@ -52,7 +52,8 @@ fun NavigationScreen() {
 
     NavHost(
         navController = navController,
-        startDestination = if (token.isNullOrEmpty()) Destination.Login.route else Destination.Home.route
+        startDestination = Destination.AddComplaint.route
+//        startDestination = if (token.isNullOrEmpty()) Destination.Login.route else Destination.Home.route
     ) {
         composable(route = Destination.Login.route) {
             val viewModel = hiltViewModel<LoginViewModel>()
