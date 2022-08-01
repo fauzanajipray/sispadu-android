@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.devajip.sispadu">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.januzanj.sipmasdes">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
 
     <application
-        android:name=".BaseApplication"
+        android:name="com.januzanj.sipmasdes.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Sispadu">
+        android:theme="@style/Theme.Sispadu"
+        tools:targetApi="m">
         <activity
-            android:name="com.devajip.sispadu.presentation.ui.main.MainActivity"
+            android:name="com.januzanj.sipmasdes.presentation.ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Sispadu">
             <intent-filter>

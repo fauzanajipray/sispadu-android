@@ -12,6 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Sispadu"
+rootProject.name = "Sipmasdes"
 include ':app'
 include ':lib'

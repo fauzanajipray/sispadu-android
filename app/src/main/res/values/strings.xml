@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sispadu</string>
+    <string name="app_name">Sipmasdes</string>
 
 <!--    No need translate -->
     <string name="profile_photo" translatable="false">Profile photo</string>
