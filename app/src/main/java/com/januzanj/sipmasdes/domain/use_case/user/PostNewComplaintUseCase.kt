@@ -9,12 +9,13 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
+import retrofit2.Callback
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
 
-class PostComplaintUseCase @Inject constructor(
+class PostNewComplaintUseCase @Inject constructor(
     private val complaintRepository: ComplaintRepository
 ) {
     operator fun invoke(
@@ -24,8 +25,12 @@ class PostComplaintUseCase @Inject constructor(
         emit(Resource.loading(null))
         try {
             val tokenWithPrefix = Constant.TOKEN_PREFIX + token
-            val response = complaintRepository.postComplaint(tokenWithPrefix, complaintRequest)
-            emit(Resource.success(response))
+            val response = complaintRepository.postNewComplaint(tokenWithPrefix, complaintRequest)
+            if (response.isSuccessful) {
+                emit(Resource.success(response.body()))
+            } else {
+                emit(Resource.error(response.message(), null))
+            }
         } catch (e: HttpException) {
             val errorResponse = Gson().fromJson(e.response()?.errorBody()?.string(), Response::class.java)
             emit(Resource.error(errorResponse.message , null))

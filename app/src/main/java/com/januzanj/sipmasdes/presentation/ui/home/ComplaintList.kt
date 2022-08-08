@@ -1,5 +1,8 @@
 package com.januzanj.sipmasdes.presentation.ui.home
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,6 +17,8 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -44,6 +50,7 @@ import com.januzanj.sipmasdes.presentation.ui.components.LoadingItem
 import com.januzanj.sipmasdes.presentation.ui.components.LoadingView
 import com.januzanj.sipmasdes.presentation.navigation.Destination
 import com.januzanj.sipmasdes.R
+import com.januzanj.sipmasdes.presentation.ui.auth.login.LoginViewModel
 import kotlinx.coroutines.flow.Flow
 
 
@@ -52,7 +59,9 @@ fun ComplaintList(
     complaints: Flow<PagingData<Complaint>>,
     navController: NavController,
     complaintViewModel: ComplaintViewModel,
-    scrollState: LazyListState
+    scrollState: LazyListState,
+    context: Context,
+    loginViewModel: LoginViewModel
 ) {
     val lazyComplaintItems = complaints.collectAsLazyPagingItems()
     val paddingTop by animateDpAsState( if (scrollState.firstVisibleItemScrollOffset == 0) 6.dp else 0.dp)
@@ -88,6 +97,14 @@ fun ComplaintList(
                 }
                 loadState.refresh is LoadState.Error -> {
                     val e = lazyComplaintItems.loadState.refresh as LoadState.Error
+                    val errorMessage = e.error.localizedMessage!!
+                    Log.e("LoadError", "Something went wrong: $errorMessage")
+                    if (errorMessage.contains("HTTP 401")) {
+                        Toast.makeText(context, "Session Expired", Toast.LENGTH_LONG).show()
+                        loginViewModel.logout()
+                        loginViewModel.setLogin(false)
+                    }
+
                     item {
                         ErrorItem(
                             message = e.error.localizedMessage!!,

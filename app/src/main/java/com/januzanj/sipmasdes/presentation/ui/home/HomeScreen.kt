@@ -1,5 +1,7 @@
 package com.januzanj.sipmasdes.presentation.ui.home
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,8 +9,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,15 +27,19 @@ import androidx.navigation.NavController
 import com.januzanj.sipmasdes.R
 import com.januzanj.sipmasdes.presentation.theme.Orange300
 import com.januzanj.sipmasdes.presentation.theme.SispaduTheme
+import com.januzanj.sipmasdes.presentation.ui.auth.login.LoginViewModel
 import com.januzanj.sipmasdes.presentation.ui.components.rememberForeverLazyListState
 
 @Composable
 fun HomeScreen(
     complaintViewModel: ComplaintViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    context: Context,
+    loginViewModel: LoginViewModel
 ) {
     val scrollState = rememberForeverLazyListState(key = "ComplaintList")
     val elevationSize by animateDpAsState(if (scrollState.firstVisibleItemScrollOffset == 0) 1.dp else 6.dp)
+    var mDisplayMenu by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -44,7 +52,45 @@ fun HomeScreen(
                     )
                 },
                 backgroundColor = MaterialTheme.colors.surface,
-                elevation = elevationSize
+                elevation = elevationSize,
+                actions = {
+                    // Icon Notification
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Filled.Notifications,
+                            contentDescription = "Notification",
+                            tint = MaterialTheme.colors.primary,
+                        )
+                    }
+                    // Creating Icon button for dropdown menu
+                    IconButton(onClick = { mDisplayMenu = !mDisplayMenu }) {
+                        Icon(
+                            Icons.Default.MoreVert,
+                            "",
+                            modifier = Modifier,
+                            MaterialTheme.colors.primary
+                        )
+                    }
+
+                    // Creating a dropdown menu
+                    DropdownMenu(
+                        expanded = mDisplayMenu,
+                        onDismissRequest = { mDisplayMenu = false }
+                    ) {
+
+                        DropdownMenuItem(onClick = {
+                            Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
+                        }) {
+                            Text(text = "Settings")
+                        }
+
+                        DropdownMenuItem(onClick = {
+                            loginViewModel.logout()
+                        }) {
+                            Text(text = "Logout")
+                        }
+                    }
+                }
             )
         },
     ) {
@@ -52,7 +98,9 @@ fun HomeScreen(
             complaints = complaintViewModel.complaintList,
             navController = navController,
             complaintViewModel = complaintViewModel,
-            scrollState = scrollState
+            scrollState = scrollState,
+            context = context,
+            loginViewModel = loginViewModel
         )
     }
 
@@ -151,13 +199,4 @@ fun ItemComplaintPreview() {
         ItemComplaintTest()
     }
 }
-
-//@Preview("HomeScreen")
-//@Preview("HomeScreen dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
-//@Composable
-//fun HomeScreenPreview() {
-//    SispaduTheme() {
-//        HomeScreen()
-//    }
-//}
 

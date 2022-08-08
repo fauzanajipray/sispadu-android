@@ -2,10 +2,13 @@ package com.januzanj.sipmasdes.data.di
 
 import com.januzanj.sipmasdes.data.repository.AuthRepositoryImpl
 import com.januzanj.sipmasdes.data.repository.ComplaintRepositoryImpl
+import com.januzanj.sipmasdes.data.repository.PublicRepositoryImpl
 import com.januzanj.sipmasdes.data.source.remote.network.AuthService
+import com.januzanj.sipmasdes.data.source.remote.network.PublicService
 import com.januzanj.sipmasdes.data.source.remote.network.UserComplaintService
 import com.januzanj.sipmasdes.domain.repository.AuthRepository
 import com.januzanj.sipmasdes.domain.repository.ComplaintRepository
+import com.januzanj.sipmasdes.domain.repository.PublicRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +18,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataModule {
+
+    @Provides
+    @Singleton
+    fun providePublicRepository(
+        publicService : PublicService
+    ): PublicRepository {
+        return PublicRepositoryImpl(publicService)
+    }
 
     @Provides
     @Singleton
@@ -31,6 +42,5 @@ object DataModule {
     ): ComplaintRepository {
         return ComplaintRepositoryImpl(complaintService)
     }
-
 
 }

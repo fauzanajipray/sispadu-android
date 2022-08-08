@@ -22,4 +22,12 @@ object AppModule {
         return context.getSharedPreferences(Constant.PREF_NAME, 0)
     }
 
+    @Provides
+    @ViewModelScoped
+    fun provideContext(
+        @ApplicationContext context: Context
+    ) : Context{
+        return context
+    }
+
 }

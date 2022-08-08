@@ -1,38 +1,38 @@
 package com.januzanj.sipmasdes.presentation.navigation
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.januzanj.sipmasdes.presentation.ui.auth.login.LoginScreen
 import com.januzanj.sipmasdes.presentation.ui.auth.login.LoginViewModel
 import com.januzanj.sipmasdes.presentation.ui.main.MainScreen
-import com.januzanj.sipmasdes.common.Constant
 import com.januzanj.sipmasdes.presentation.ui.add_complaint.AddComplaintScreen
 import com.januzanj.sipmasdes.presentation.ui.add_complaint.camera.CameraScreen
 import com.januzanj.sipmasdes.presentation.ui.add_complaint.camera.CameraX
 import com.januzanj.sipmasdes.presentation.ui.home.detail.ComplaintDetailScreen
-import com.januzanj.sipmasdes.presentation.ui.main.LogoutViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.januzanj.sipmasdes.presentation.ui.add_complaint.camera.CameraViewModel
+import com.januzanj.sipmasdes.presentation.ui.add_complaint.AddComplaintViewModel
+import com.januzanj.sipmasdes.presentation.ui.add_complaint.confirm.AddComplaintConfirmScreen
+import com.januzanj.sipmasdes.presentation.ui.main.SplashScreen
 
 @Composable
 fun NavigationCompose(
     context: Context,
-    lifecycleOwner: LifecycleOwner
+    lifecycleOwner: LifecycleOwner,
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    addComplaintViewModel: AddComplaintViewModel = hiltViewModel()
 ) {
     // Remember a SystemUiController
     val systemUiController = rememberSystemUiController()
@@ -40,7 +40,7 @@ fun NavigationCompose(
     val primaryVariantColor = MaterialTheme.colors.primaryVariant
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
-    var cameraX: CameraX = CameraX(context, lifecycleOwner)
+    val cameraX = CameraX(context, lifecycleOwner)
 
     SideEffect {
         // Update all of the system bar colors to be transparent, and use
@@ -57,17 +57,20 @@ fun NavigationCompose(
     }
 
     val navController = rememberNavController()
-    val pref: SharedPreferences = LocalContext.current.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE)
-    val token = pref.getString(Constant.PREF_KEY_USER_TOKEN, "")
+    val isLogin by loginViewModel.isLogin
 
-    val cameraViewModel: CameraViewModel = viewModel()
     NavHost(
         navController = navController,
-        startDestination = if (token.isNullOrEmpty()) Destination.Login.route else Destination.Home.route
+        startDestination = Destination.getStartDestination()
     ) {
+        composable(route = Destination.Splash.route){
+            SplashScreen(
+                navController = navController,
+                isLogin = isLogin
+            )
+        }
         composable(route = Destination.Login.route) {
-            val viewModel = hiltViewModel<LoginViewModel>()
-            if (viewModel.state.value.isSuccess){
+            if (isLogin) {
                 LaunchedEffect(key1 = Unit) {
                     navController.navigate(Destination.Home.route) {
                         popUpTo(Destination.Login.route) {
@@ -76,12 +79,11 @@ fun NavigationCompose(
                     }
                 }
             } else {
-                LoginScreen()
+                LoginScreen(loginViewModel)
             }
         }
         composable(route = Destination.Home.route) {
-            val viewModel :  LogoutViewModel = hiltViewModel()
-            if (viewModel.state.value.isLogout){
+            if (!isLogin) {
                 LaunchedEffect(key1 = Unit) {
                     navController.navigate(Destination.Login.route) {
                         popUpTo(Destination.Home.route) {
@@ -90,7 +92,7 @@ fun NavigationCompose(
                     }
                 }
             } else {
-                MainScreen(navController = navController)
+                MainScreen(navController = navController, context = context, loginViewModel = loginViewModel)
             }
         }
         composable(route = Destination.ComplaintDetail.route.plus("/{complaintId}"),
@@ -107,17 +109,23 @@ fun NavigationCompose(
                 )
             }
         }
-        composable(route = Destination.AddComplaint.route) {
-            AddComplaintScreen(
-                navController = navController,
-                cameraViewModel = cameraViewModel
-            )
-        }
         composable(route = Destination.Camera.route){
             CameraScreen(
                 navController = navController,
                 cameraX = cameraX,
-                cameraViewModel
+                addComplaintViewModel
+            )
+        }
+        composable(route = Destination.AddComplaint.route) {
+            AddComplaintScreen(
+                navController = navController,
+                addComplaintViewModel
+            )
+        }
+        composable(route = Destination.AddComplaintConfirm.route){
+            AddComplaintConfirmScreen(
+                navController = navController,
+                addComplaintViewModel
             )
         }
     }

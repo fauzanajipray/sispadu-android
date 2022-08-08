@@ -5,7 +5,7 @@ import retrofit2.http.*
 
 interface StaffComplaintService {
 
-    @Headers("Content-Type: application/json")
+    @Headers("Accept: application/json")
     @GET("staff/complaints")
     suspend fun getComplaint(
         @Header("Authorization") token: String,
@@ -13,7 +13,7 @@ interface StaffComplaintService {
     ): ComplaintsResponse
 
     //Confirm Complaint
-    @Headers("Content-Type: application/json")
+    @Headers("Accept: application/json")
     @POST("staff/complaints/{id}/confirm")
     suspend fun confirmComplaint(
         @Header("Authorization") token: String,

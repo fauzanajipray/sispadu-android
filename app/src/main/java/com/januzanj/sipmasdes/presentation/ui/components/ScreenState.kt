@@ -39,18 +39,23 @@ fun ErrorItem(
     modifier: Modifier = Modifier,
     onClickRetry: () -> Unit
 ) {
+    val errorMessage = if (message.contains("Unable to resolve host")){
+        "No internet connection"
+    } else {
+        message
+    }
     Column(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = message,
+            text = errorMessage,
             maxLines = 1,
             modifier = Modifier.padding(
                 16.dp,
             ),
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.subtitle2,
             color = Color.Red
         )
         OutlinedButton(onClick = onClickRetry) {

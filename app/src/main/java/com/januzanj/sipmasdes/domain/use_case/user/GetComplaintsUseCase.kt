@@ -1,5 +1,6 @@
 package com.januzanj.sipmasdes.domain.use_case.user
 
+import android.util.Log
 import com.januzanj.sipmasdes.common.Constant
 import com.januzanj.sipmasdes.common.Resource
 import com.januzanj.sipmasdes.data.source.remote.response.ComplaintsRequestParams
@@ -12,6 +13,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
+lateinit var response: ComplaintsResponse
 class GetComplaintsUseCase @Inject constructor(
     private val complaintRepository: ComplaintRepository
 ) {
@@ -22,11 +24,12 @@ class GetComplaintsUseCase @Inject constructor(
         emit(Resource.loading(null))
         try {
             val tokenWithPrefix = Constant.TOKEN_PREFIX + token
-            val response = complaintRepository.getComplaints(tokenWithPrefix, query, 1)
+            response = complaintRepository.getComplaints(tokenWithPrefix, query, 1)
             emit(Resource.success(response))
         } catch (e: HttpException) {
+            Log.e("GetComplaintsUseCase", e.toString())
             val errorResponse = Gson().fromJson(e.response()?.errorBody()?.string(), ComplaintsResponse::class.java)
-            emit(Resource.error(errorResponse.message , null))
+            emit(Resource.error(errorResponse.message , response))
         } catch (e: IOException) {
             emit(Resource.error(e.localizedMessage ?: "Network Error Occurred", null))
         }

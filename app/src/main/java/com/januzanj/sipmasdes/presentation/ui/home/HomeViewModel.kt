@@ -148,6 +148,7 @@ class HomeViewModel @Inject constructor(
                     )
                 }
                 StatusMessage.ERROR -> {
+                    Log.e(TAG, "complaint: error: ${it.message}")
                     _state.value = HomeViewState(error = it.message ?: "Error Occurred")
                     _state.value = HomeViewState(isLoading = false)
                 }

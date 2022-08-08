@@ -25,6 +25,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
         }
     }
     compileOptions {
@@ -71,6 +72,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-flowlayout:0.20.0"
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
     implementation 'androidx.compose.animation:animation:1.1.1'
+    //lottie
+    implementation "com.airbnb.android:lottie-compose:$versions.lottieVersion"
 
     // compose insets
     implementation "com.google.accompanist:accompanist-insets:$versions.accompanistVersion"

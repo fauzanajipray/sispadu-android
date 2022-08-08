@@ -51,6 +51,9 @@ ext.versions = [
         // compose compatibles
         orchestraVersion     : '1.1.1',
 
+        // lottie compose
+        lottieVersion       : '5.2.0',
+
         // compose insets
         accompanistVersion   : '0.20.0',
 

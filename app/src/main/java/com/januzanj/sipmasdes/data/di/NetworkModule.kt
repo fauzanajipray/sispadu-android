@@ -2,6 +2,7 @@ package com.januzanj.sipmasdes.data.di
 
 import com.januzanj.sipmasdes.data.source.remote.network.AuthService
 import com.januzanj.sipmasdes.common.Constant
+import com.januzanj.sipmasdes.data.source.remote.network.PublicService
 import com.januzanj.sipmasdes.data.source.remote.network.StaffComplaintService
 import com.januzanj.sipmasdes.data.source.remote.network.UserComplaintService
 import dagger.Module
@@ -55,6 +56,12 @@ object NetworkModule {
     @Singleton
     fun provideStaffComplaintService(retrofit: Retrofit) : StaffComplaintService {
         return retrofit.create(StaffComplaintService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePublicService(retrofit: Retrofit) : PublicService {
+        return retrofit.create(PublicService::class.java)
     }
 
 }

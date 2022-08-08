@@ -14,11 +14,13 @@
         <entry key="..\:/Programming/All about java android/compose/Sispadu/app/src/main/res/drawable/ic_history_reguler.xml" value="0.208" />
         <entry key="..\:/Programming/All about java android/compose/Sispadu/app/src/main/res/drawable/ic_home_regular.xml" value="0.159" />
         <entry key="..\:/Programming/All about java android/compose/Sispadu/app/src/main/res/drawable/ic_launcher_background.xml" value="0.18" />
+        <entry key="..\:/Programming/All about java android/compose/Sispadu/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.18" />
         <entry key="..\:/Programming/All about java android/compose/Sispadu/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.18" />
+        <entry key="..\:/Programming/All about java android/compose/Sispadu/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1325" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

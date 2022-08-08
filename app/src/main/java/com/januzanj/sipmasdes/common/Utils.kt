@@ -62,7 +62,7 @@ fun getDateForHuman(date: String): String {
     val formatterSimple: DateFormat = SimpleDateFormat(stringResource(R.string.date_format_patern_1))
     val formatterMonth: DateFormat = SimpleDateFormat(stringResource(R.string.date_format_patern_2))
     // :date plus 7 hours || GMT +7
-    val datePlus7 = formatterSimple.parse(date).time + TimeUnit.HOURS.toMillis(7)
+    val datePlus7 = formatterSimple.parse(date)!!.time + TimeUnit.HOURS.toMillis(7)
 
     val past = Date(datePlus7)
     val now: Date? = formatterSimple.parse(formatterSimple.format(Date()))

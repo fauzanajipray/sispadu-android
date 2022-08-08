@@ -33,7 +33,6 @@ class ComplaintViewModel @Inject constructor(
 
     init {
         token = pref.getString(Constant.PREF_KEY_USER_TOKEN, "") ?: ""
-
     }
 
     val complaintList = getComplaintPagingUseCase(token, _complaintsRequestParams.value).cachedIn(viewModelScope)
@@ -66,8 +65,5 @@ class ComplaintViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-//    fun getComplaintDetail(complaintId: Int): Flow<Resource<ComplaintDetailResponse>> {
-//        return getComplaintDetailUseCase(token, complaintId)
-//    }
 
 }

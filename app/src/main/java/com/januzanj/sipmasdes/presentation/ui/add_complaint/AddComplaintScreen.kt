@@ -1,7 +1,6 @@
 package com.januzanj.sipmasdes.presentation.ui.add_complaint
 
 import android.Manifest
-import android.content.Context
 import android.content.res.Configuration
 import android.net.Uri
 import android.util.Log
@@ -9,10 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -41,10 +37,11 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.januzanj.sipmasdes.R
 import com.januzanj.sipmasdes.presentation.theme.SispaduTheme
-import com.januzanj.sipmasdes.presentation.ui.components.Chip
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.januzanj.sipmasdes.presentation.ui.add_complaint.camera.CameraViewModel
+import com.januzanj.sipmasdes.domain.model.Position
+import com.januzanj.sipmasdes.presentation.navigation.Destination
+import com.januzanj.sipmasdes.presentation.ui.components.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -52,8 +49,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddComplaintScreen(
     navController: NavController,
-    viewModel: AddComplaintViewModel = hiltViewModel(),
-    cameraViewModel: CameraViewModel
+    viewModel: AddComplaintViewModel
 ) {
     val scrollState = rememberLazyListState()
     val elevationSize by animateDpAsState(if (scrollState.firstVisibleItemScrollOffset == 0) 1.dp else 8.dp)
@@ -70,12 +66,12 @@ fun AddComplaintScreen(
         )
     )
 
-    viewModel.setImageUri(cameraViewModel.imageUri.value)
+    val loadingPositionState by viewModel.getPositionLoadingState
+    val viewLoadingState by viewModel.getPositionState
 
     val launcherGallery =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
             if (it != null) {
-                cameraViewModel.setImageUri(it)
                 viewModel.setImageUri(it)
                 scope.launch {
                     modalBottomSheetState.hide()
@@ -83,44 +79,73 @@ fun AddComplaintScreen(
             }
             Log.d("AddComplaintScreen", "selectGallery: $it")
         }
+    ModalDrawer(drawerContent = {
+        BottomSheetItem(
+            icon = R.drawable.ic_baseline_camera_alt_24,
+            title = "Take photo",
+            onItemClick = {
 
+            })
+        BottomSheetItem(
+            icon = R.drawable.ic_baseline_folder_open_24,
+            title = "Insert from gallery",
+            onItemClick = {
 
-    ModalBottomSheetLayout(
-        sheetContent = { BottomSheetContent(navController,permissionsState,launcherGallery) },
-        sheetState = modalBottomSheetState,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        scrimColor = scrimColor,
-    ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("Add Complaint") },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            navController.popBackStack()
-                        }) {
-                            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
-                        }
-                    },
-                    backgroundColor = MaterialTheme.colors.surface,
-                    elevation = elevationSize
-                )
-            },
+            })
+    }) {
+        ModalBottomSheetLayout(
+            sheetContent = { BottomSheetContent(navController,permissionsState,launcherGallery) },
+            sheetState = modalBottomSheetState,
+            sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+            scrimColor = scrimColor,
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp)
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Add Complaint") },
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                navController.popBackStack()
+                            }) {
+                                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                            }
+                        },
+                        backgroundColor = MaterialTheme.colors.surface,
+                        elevation = elevationSize
+                    )
+                },
             ) {
-                AddComplaintForm(
-                    modifier = Modifier,
-                    scrollState,
-                    navController,
-                    scope,
-                    modalBottomSheetState,
-                    viewModel,
-                    cameraViewModel
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp)
+                ) {
+                    if (loadingPositionState) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                        )
+                    }
+                    viewLoadingState.apply {
+                        if (isError) {
+                            ErrorItem(
+                                modifier = Modifier.align(Alignment.Center),
+                                message = errorMessage
+                            ) {
+                                viewModel.getToPositionSend()
+                            }
+                        }
+                        if (isSuccess) {
+                            AddComplaintForm(
+                                modifier = Modifier,
+                                scrollState,
+                                navController,
+                                scope,
+                                modalBottomSheetState,
+                                viewModel
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -134,8 +159,7 @@ fun AddComplaintForm(
     navController: NavController,
     scope: CoroutineScope,
     modalBottomSheetState: ModalBottomSheetState,
-    viewModel: AddComplaintViewModel,
-    cameraViewModel: CameraViewModel
+    viewModel: AddComplaintViewModel
 ) {
     val complaintTitle by viewModel.title.observeAsState("")
     val complaintDescription by viewModel.description.observeAsState("")
@@ -143,6 +167,13 @@ fun AddComplaintForm(
     val isAnonymous by viewModel.isAnonymous.observeAsState(false)
     val imageUri by viewModel.imageUri.observeAsState(Uri.EMPTY)
 
+    val listPosition by viewModel.listOfPosition
+    val addComplaintState by viewModel.addComplaintState
+    LaunchedEffect(key1 = true){
+        if (addComplaintState.isLoading) {
+            navController.navigate(Destination.AddComplaintConfirm.route)
+        }
+    }
     LazyColumn(
         state = scrollState,
         modifier = modifier
@@ -209,7 +240,7 @@ fun AddComplaintForm(
                     OutlinedTextField(
                         value = complaintDescription,
                         onValueChange = { viewModel.setDescription(it) },
-                        singleLine = true,
+                        singleLine = false,
                         modifier = Modifier
                             .padding(top = 8.dp)
                             .fillMaxWidth()
@@ -243,13 +274,14 @@ fun AddComplaintForm(
                         color = Color.LightGray,
                         style = MaterialTheme.typography.subtitle1
                     )
-                    OutlinedTextField(
-                        value = complaintTitle,
-                        onValueChange = { viewModel.setTitle(it)  },
-                        singleLine = true,
+                    DropDownMenuList(
                         modifier = Modifier
-                            .padding(top = 8.dp)
                             .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        items = listPosition,
+                        onItemSelected = { text, id ->
+                            viewModel.setToPosition(Position(id, text))
+                        },
                     )
                 }
             }
@@ -442,7 +474,6 @@ fun AddComplaintForm(
                                         .padding(1.dp)
                                         .clickable {
                                             viewModel.setImageUri(Uri.EMPTY)
-                                            cameraViewModel.setImageUri(Uri.EMPTY)
                                         }
                                     ,
                                 )
@@ -463,7 +494,7 @@ fun AddComplaintForm(
                                         .fillMaxWidth()
                                         .fillParentMaxHeight()
                                         .border(
-                                            color =Color.LightGray,
+                                            color = Color.LightGray,
                                             width = 1.dp,
                                             shape = RoundedCornerShape(5.dp)
                                         ),
@@ -484,7 +515,6 @@ fun AddComplaintForm(
                 }
             }
         }
-
         item {
             Spacer(modifier = Modifier
                 .height(1.dp)
@@ -496,23 +526,41 @@ fun AddComplaintForm(
                     .fillMaxWidth(),
                 elevation = 6.dp
             ) {
-                Box(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                    horizontalArrangement = Arrangement.End
                 ) {
                     Button(
-                        modifier = Modifier.align(Alignment.CenterEnd),
-                        onClick = { /*TODO Post Complaint*/ }
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.surface,
+                            contentColor = MaterialTheme.colors.primary
+                        ),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colors.primary
+                        ),
+                        onClick = {
+                            viewModel.clearForm()
+                        }
+                    ) {
+                        Text(text = "Clear")
+                    }
+                    Spacer(modifier = Modifier
+                        .width(8.dp))
+                    Button(
+                        onClick = {
+                            viewModel.submitForm()
+                        }
                     ) {
                         Text(text = "Submit")
                     }
+
                 }
             }
         }
-
     }
-
 }
 
 
@@ -521,6 +569,13 @@ fun AddComplaintForm(
 @Composable
 fun AddComplaintScreenPreview(){
     SispaduTheme {
-//        AddComplaintScreen()
+        OutlinedTextField(
+            value = "Lorem",
+            onValueChange = {  },
+            singleLine = true,
+            modifier = Modifier
+                .padding(top = 8.dp)
+        )
+
     }
 }

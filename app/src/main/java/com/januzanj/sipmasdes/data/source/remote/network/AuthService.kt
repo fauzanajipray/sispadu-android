@@ -5,20 +5,20 @@ import retrofit2.http.*
 
 interface AuthService {
 
-    @Headers("Content-Type: application/json")
+    @Headers("Accept: application/json")
     @POST("login")
     suspend fun postLogin(
         @Body loginRequest: LoginRequest
     ): LoginResponse
 
-    @Headers("Content-Type: application/json")
+    @Headers("Accept: application/json")
     @GET("logout")
     suspend fun getLogout(
         @Header("Authorization") token: String
     ): LogoutResponse
 
     // Register
-    @Headers("Content-Type: application/json")
+    @Headers("Accept: application/json")
     @POST("register")
     suspend fun postRegister(
         @Body registerRequest: RegisterRequest
